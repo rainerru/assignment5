@@ -9,11 +9,16 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
-public class MorseReader extends BufferedReader
+public class MorseReader extends AbstractMorseReader
 {
 
 	protected Map<String, String> morseCodes = new HashMap<String, String>();
 
+	public MorseReader ( Reader in ) throws IOException { super(in); }
+
+	public MorseReader ( Reader in, int sz ) throws IOException { super(in,sz); }
+
+/*
 	public MorseReader ( Reader in ) throws IOException
 	{
 		super(in);
@@ -41,7 +46,7 @@ public class MorseReader extends BufferedReader
 				this.morseCodes.put(code, letter);
 		}
 	}
-
+*/
 	public String readLine () throws IOException
 	{
 
