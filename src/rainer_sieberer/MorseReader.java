@@ -22,7 +22,7 @@ public class MorseReader extends AbstractMorseReader
 	 * https://stackoverflow.com/questions/1856501/java-morsecode-converter
 	 *
 	 */
-	public String readLine () throws IOException
+	/*public String readLine () throws IOException
 	{
 
 		String line;
@@ -47,9 +47,9 @@ public class MorseReader extends AbstractMorseReader
 
 		return result;
 
-	}
+	}*/
 
-	/*public String readLine () throws IOException
+	public String readLine () throws IOException
 	{
 
 		StringBuilder result = new StringBuilder();
@@ -61,13 +61,16 @@ public class MorseReader extends AbstractMorseReader
 		{
 			currentChar = this.read();
 			if ( currentChar == '\n' || currentChar == '\r' )
+			{
+				result.append(" ");
 				return result.toString();
+			}
 			result.append((char)currentChar);
 		}
 
 		return null;
 
-	}*/
+	}
 
 	public int read ( char[] cbuf, int off, int len ) throws IOException
 	{

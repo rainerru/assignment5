@@ -14,12 +14,12 @@ public abstract class AbstractMorseReader extends BufferedReader
 {
 
 	protected Map<String, String> morseCodes;
-	protected BufferedReader decoratedReader;
+	protected Reader decoratedReader; //BufferedReader
 
 	public AbstractMorseReader ( Reader in ) throws IOException
 	{
 		super(in);
-		this.decoratedReader = new BufferedReader(in);
+		this.decoratedReader = in; //new BufferedReader(in);
 		this.morseCodes = new HashMap<String, String>();
 		this.storeCode();
 	}
@@ -27,7 +27,7 @@ public abstract class AbstractMorseReader extends BufferedReader
 	public AbstractMorseReader ( Reader in, int sz ) throws IOException
 	{
 		super(in,sz);
-		this.decoratedReader = new BufferedReader(in,sz);
+		this.decoratedReader = in; //new BufferedReader(in,sz);
 		this.morseCodes = new HashMap<String, String>();
 		this.storeCode();
 	}
@@ -58,7 +58,7 @@ public abstract class AbstractMorseReader extends BufferedReader
 		return this.decoratedReader.read( cbuf, off, len );
 	}
 
-	public String readLine () throws IOException { return this.decoratedReader.readLine(); }
+	// public String readLine () throws IOException { return this.decoratedReader.readLine(); }
 
 	public boolean ready () throws IOException { return this.decoratedReader.ready(); }
 
