@@ -14,27 +14,27 @@ public abstract class AbstractMorseReader extends BufferedReader
 {
 
 	protected Map<String, String> morseCodes;
-	BufferedReader decoratedReader;
+	protected BufferedReader decoratedReader;
 
 	public AbstractMorseReader ( Reader in ) throws IOException
 	{
 		super(in);
-		decoratedReader = new BufferedReader(in);
-		morseCodes = new HashMap<String, String>();
-		this.storeCode();		
+		this.decoratedReader = new BufferedReader(in);
+		this.morseCodes = new HashMap<String, String>();
+		this.storeCode();
 	}
 
 	public AbstractMorseReader ( Reader in, int sz ) throws IOException
 	{
 		super(in,sz);
-		decoratedReader = new BufferedReader(in,sz);
-		morseCodes = new HashMap<String, String>();
+		this.decoratedReader = new BufferedReader(in,sz);
+		this.morseCodes = new HashMap<String, String>();
 		this.storeCode();
 	}
 
 	private void storeCode () throws FileNotFoundException
 	{
-		File file1 = new File ("morsecode.txt");
+		File file1 = new File ("../conf/morsecode.txt");
 		Scanner codeScanner = new Scanner(file1);
 
 		while (codeScanner.hasNext())
@@ -42,7 +42,7 @@ public abstract class AbstractMorseReader extends BufferedReader
 				String letter = codeScanner.next();
 				String code = codeScanner.next();
 				this.morseCodes.put(code, letter);
-		}
+		}	
 	}
 
 	public void close () throws IOException{ this.decoratedReader.close(); }

@@ -12,67 +12,101 @@ import java.util.HashMap;
 public class MorseReader extends AbstractMorseReader
 {
 
-	protected Map<String, String> morseCodes = new HashMap<String, String>();
-
 	public MorseReader ( Reader in ) throws IOException { super(in); }
 
 	public MorseReader ( Reader in, int sz ) throws IOException { super(in,sz); }
 
-/*
-	public MorseReader ( Reader in ) throws IOException
-	{
-		super(in);
-		File file1 = new File ("morsecode.txt");
-		Scanner codeScanner = new Scanner(file1);
-
-		while (codeScanner.hasNext())
-		{
-				String letter = codeScanner.next();
-				String code = codeScanner.next();
-				this.morseCodes.put(code, letter);
-		}
-	}
-
-	public MorseReader ( Reader in, int sz ) throws IOException
-	{
-		super(in,sz);
-		File file1 = new File ("morsecode.txt");
-		Scanner codeScanner = new Scanner(file1);
-
-		while (codeScanner.hasNext())
-		{
-				String letter = codeScanner.next();
-				String code = codeScanner.next();
-				this.morseCodes.put(code, letter);
-		}
-	}
-*/
+	/**
+	 *	
+	 * source: inspired by stackoverflow
+	 * https://stackoverflow.com/questions/1856501/java-morsecode-converter
+	 *
+	 */
 	public String readLine () throws IOException
 	{
 
 		String line;
 		String result = "";
 
-		while ((line = super.readLine()) != null)
+		if ( !this.decoratedReader.ready() ) return null;
+
+		while ((line = this.decoratedReader.readLine()) != null)
 		{
 				String letter = "";
 
 				for (String morseLetter: line.split(" "))
 				{
-				    letter = morseCodes.get(morseLetter);
+				    letter = this.morseCodes.get(morseLetter);
 				    result = result + letter;
 				}
 
-				if (letter.equals(".")) {
-				    // Insert a new line after a period.
-				    result = result + "\n";
-				} else {
-				    // Insert a space between words.
-				    result = result + " ";
-				}
+				if ( this.decoratedReader.ready() )
+					result = result + " ";
+				
 		}
 
 		return result;
+
+	}
+
+	/*public String readLine () throws IOException
+	{
+
+		StringBuilder result = new StringBuilder();
+		int currentChar;
+
+		if ( !this.ready() ) return null;
+
+		while ( this.ready() )
+		{
+			currentChar = this.read();
+			if ( currentChar == '\n' || currentChar == '\r' )
+				return result.toString();
+			result.append((char)currentChar);
+		}
+
+		return null;
+
+	}*/
+
+	public int read ( char[] cbuf, int off, int len ) throws IOException
+	{
+
+		int currentChar;
+
+		if ( !this.ready() )
+			return -1;
+
+		for ( int i = off; i < off+len; i++ )
+		{
+			if ( !this.ready() || ( currentChar = this.read() ) == -1 )
+				return i-off;
+			cbuf[i] = (char)currentChar;
+		}
+
+		return len; // len = i, if no previous return statement has been reached
+
+	}
+
+	public int read () throws IOException
+	{
+		if ( !this.ready() )
+			return -1;
+
+		StringBuilder str = new StringBuilder();
+		int nextChar;
+
+		while ( this.ready() && ( nextChar = this.decoratedReader.read() ) != -1 )
+		{
+			if ( nextChar == '\n' || nextChar == '\r' )
+				return nextChar;
+
+			if ( nextChar == ' ' )
+				return this.morseCodes.get( str.toString() ).charAt(0);
+			str.append((char)nextChar);
+		}
+
+		return -1;
 
 	}
 
